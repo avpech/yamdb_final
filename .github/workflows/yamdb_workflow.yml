@@ -47,7 +47,7 @@ jobs:
           context: ./api_yamdb
           file: ./api_yamdb/Dockerfile
           push: true
-          tags: artpech/infra_actions:latest
+          tags: artpech/yamdb:latest
 
   deploy:
     runs-on: ubuntu-latest
