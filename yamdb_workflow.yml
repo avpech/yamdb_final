@@ -1,4 +1,4 @@
-name: Django-app workflow
+name: api_yamdb workflow
 
 on: [push]
 
@@ -44,9 +44,10 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2 
         with:
-          file: api_yamdb/Dockerfile
+          context: ./api_yamdb
+          file: ./api_yamdb/Dockerfile
           push: true
-          tags: artpech/infra_actions:latest
+          tags: artpech/yamdb:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -61,7 +62,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             sudo docker-compose stop
-            sudo docker-compose rm web
+            sudo docker-compose rm web .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
