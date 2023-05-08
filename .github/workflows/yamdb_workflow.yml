@@ -25,6 +25,7 @@ jobs:
           pytest
 
   build_and_push_to_docker_hub:
+    if: github.ref == 'refs/heads/master'
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     needs: tests
@@ -50,6 +51,7 @@ jobs:
           tags: artpech/yamdb:latest
 
   deploy:
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
     steps:
@@ -63,9 +65,7 @@ jobs:
           script: |
             sudo docker-compose stop
             sudo docker-compose rm web
-            rm .env
-            touch .env
-            echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
+            echo DB_ENGINE=${{ secrets.DB_ENGINE }} > .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
